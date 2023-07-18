@@ -9,8 +9,8 @@ from sklearn.model_selection import train_test_split
 @dataclass
 class DataIngestionConfig:
     file_path :str= os.path.join('data', 'boston.csv')
-    train_data_path:str= os.path.join('artifacts','train_data.csv')
-    test_data_path :str= os.path.join('artifacts','test_data.csv')
+    train_data_path:str= os.path.join('artifact','train_data.csv')
+    test_data_path :str= os.path.join('artifact','test_data.csv')
 
 class DataIngestion:
     def __init__(self):
@@ -19,7 +19,8 @@ class DataIngestion:
     def initiate_data_ingestion(self):
         try :
             logging.info("Starting Data Ingestion")
-            data= pd.read_csv(self.dataingestionconfig.file_path)
+            data= pd.read_csv(self.dataingestionconfig.file_path ,index_col='Unnamed: 0')
+            
             train_data, test_data= train_test_split(data, test_size=0.25)
             
             os.makedirs(os.path.dirname(self.dataingestionconfig.train_data_path), exist_ok=True)
