@@ -34,3 +34,7 @@ This data frame contains the following columns:
 
 ### run below command to install packages and requirements
 > python setup.py install
+
+### AWS Beanstalk deployment :
+  - make .ebextensions folder
+  - under .ebextensions make python.config file
