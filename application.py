@@ -2,7 +2,8 @@ from flask import Flask, request, jsonify, render_template
 import os, sys
 from src.pipeline.prediction_pipeline import PredictOutput, CustomData
 
-app=Flask(__name__)
+application=Flask(__name__)
+app=application
 
 @app.route('/')
 def home_page():
