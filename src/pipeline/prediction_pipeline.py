@@ -14,9 +14,10 @@ class PredictOutput :
          logging.info("Predicting the output and loading object ")
          preprocessor_obj= load_object(os.path.join('artifact','preprocessor.pkl'))
          model= load_object(os.path.join('artifact','model.pkl'))
-    
+         print("Input data: ", df)
          logging.info("Transforming the input dataframe ")
          df_transform= preprocessor_obj.transform(df)
+         print("Transformed Data:", df_transform)
          y_pred= model.predict(df_transform)
 
          return y_pred

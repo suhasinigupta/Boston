@@ -14,19 +14,6 @@ from src.utils import save_object
 class DataTransformationConfig:
     preprocessor_file_path:str = os.path.join('artifact', 'preprocessor.pkl')
 
-class LogTransformer(BaseEstimator, TransformerMixin) :
-    def __init__(self):
-        self.cols= ['lstat','nox','ptratio','dis']
-    
-    def fit(self,x):
-        return self
-    
-    def transform(self,x):
-        for var in self.cols :
-            x[var]= np.log(x[var])
-        return x
-    
-
 class DataTransformation:
     def __init__(self):
         self.transformationconfig=DataTransformationConfig()
@@ -34,8 +21,7 @@ class DataTransformation:
     def get_preprocessor_object(self):
         try:
 
-           pipeline= Pipeline(steps= [("log_transformer", LogTransformer()), 
-                               ("Standard Scaling", StandardScaler())])
+           pipeline= Pipeline(steps= [("Standard Scaling", StandardScaler())])
 
            
            return pipeline
@@ -50,15 +36,16 @@ class DataTransformation:
             logging.info("Starting Data Transformation")
             train_df= pd.read_csv(train_data)
             test_df= pd.read_csv(test_data)
-            x_train= train_df.drop(columns=['medv'], axis=1)
-            x_test = test_df.drop(columns=['medv'], axis=1) 
+            x_train= train_df[['indus', 'nox', 'rm', 'tax', 'ptratio', 'lstat', 'dis' , 'age' ]]
+            x_test = test_df[['indus', 'nox', 'rm', 'tax', 'ptratio', 'lstat', 'dis' , 'age' ]]
             
             y_train_df= train_df['medv']
             y_test_df= test_df['medv']
           
             preprocessor_obj= self.get_preprocessor_object()
 
-            x_preprocessed_train= preprocessor_obj.fit_transform(x_train)
+            preprocessor_obj.fit(x_train)
+            x_preprocessed_train= preprocessor_obj.transform(x_train)
             x_preprocessed_test = preprocessor_obj.transform(x_test)
 
             train_arr = np.c_[x_preprocessed_train, np.array(y_train_df)]
